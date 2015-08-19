@@ -1,3 +1,4 @@
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -10,8 +11,10 @@ var users = require('./routes/users');
 
 var app = express();
 
-// 路由
-routes(app);
+app.use(bodyParser.urlencoded({    
+  extended: true
+}));
+
 
 // 数据库
 var settings = require('./settings');
@@ -28,12 +31,15 @@ app.use(session({
         port: settings.port
       })
   }
-}))
+}));
 
 // flash页面通知
 var flash = require('connect-flash');
 app.use(flash());
 
+
+// 路由
+routes(app);
 
 
 // view engine setup
@@ -43,8 +49,8 @@ app.set('view engine', 'ejs');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -57,6 +63,8 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
+
 
 // error handlers
 
